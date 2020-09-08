@@ -22,7 +22,13 @@ before_install:
 script:
   - docker run aspetter/react-test npm test -- --coverage
 
-after_success:
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+   branch:master
+
+#after_success:
   #- docker build -t aspetter/k8s-client ./client
   #- docker build -t aspetter/k8s-nginx ./nginx
   #- docker build -t aspetter/k8s-server ./server
