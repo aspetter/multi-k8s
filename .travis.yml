@@ -27,7 +27,7 @@ script:
   - docker run aspetter/react-test npm test -- --coverage
 
 deploy:
-  provider: script
+ provider: script
   script: bash ./deploy.sh
   on:
    branch: master
