@@ -1,10 +1,13 @@
 docker build -t aspetter/gk8s-client:latest -t aspetter/gk8s-client:$GIT_SHA -f ./client/Dockerfile ./client
 docker build -t aspetter/gk8s-server:latest -t aspetter/gk8s-server:$GIT_SHA -f ./server/Dockerfile ./server
 docker build -t aspetter/gk8s-worker:latest -t aspetter/gk8s-worker:$GIT_SHA -f ./worker/Dockerfile ./worker
-docker push aspetter/gk8s-client
-docker push aspetter/gk8s-server
-docker push aspetter/gk8s-worker
+docker push aspetter/gk8s-client:latest
+docker push aspetter/gk8s-client:$GIT_SHA
+docker push aspetter/gk8s-server:latest
+docker push aspetter/gk8s-server:$GIT_SHA
+docker push aspetter/gk8s-worker:latest
+docker push aspetter/gk8s-worker:$GIT_SHA
 kubectl apply -f k8s
-kubectl set image deployments/client-deployment server=aspetter/gk8s-client
-kubectl set image deployments/server-deployment server=aspetter/gk8s-server
-kubectl set image deployments/worker-deployment server=aspetter/gk8s-worker
+kubectl set image deployments/server-deployment server=aspetter/gk8s-server:$GIT_SHA
+kubectl set image deployments/client-deployment client=aspetter/gk8s-client:$GIT_SHA
+kubectl set image deployments/worker-deployment worker=aspetter/gk8s-worker:$GIT_SHA
