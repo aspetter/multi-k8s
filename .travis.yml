@@ -1,0 +1,41 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - curl https://sdk.cloud.google.com | bash > dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - gcloud auth activate-service-account --key-file service-account.json
+  - docker build -t aspetter/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run aspetter/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t aspetter/k8s-client ./client
+  - docker build -t aspetter/k8s-nginx ./nginx
+  - docker build -t aspetter/k8s-server ./server
+  - docker build -t aspetter/k8s-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push aspetter/k8s-client
+  - docker push aspetter/k8s-nginx
+  - docker push aspetter/k8s-server
+  - docker push aspetter/k8s-worker
+
+# dont deploy to AWS
+#deploy:
+#    provider: elasticbeanstalk
+#    region: ap-southeast-2
+#    app: multi-docker
+#    env: MultiDocker-env
+#    bucket_name: elasticbeanstalk-ap-southeast-2-050896652040
+#    bucket_path: dockerfile-multi
+#    on:
+#        branch: master
+#    access_key_id: $AWS_ACCESS_KEY
+#    secret_access_key: $AWS_SECRET_KEY
