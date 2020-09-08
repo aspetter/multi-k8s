@@ -14,7 +14,7 @@ spec:
   spec:
    containers:
     - name: worker
-      image: aspetter/k8s-worker
+      image: aspetter/gk8s-worker
       env:
       - name: REDIS_HOST
         value: redis-cluster-ip-service
