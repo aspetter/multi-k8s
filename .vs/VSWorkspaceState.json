@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\k8s"
+    "\\k8s",
+    "\\server",
+    "\\worker"
   ],
-  "SelectedNode": "\\k8s\\ingress.yaml",
+  "SelectedNode": "\\.travis.yml",
   "PreviewInSolutionExplorer": false
 }
